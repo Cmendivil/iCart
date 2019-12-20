@@ -47,14 +47,75 @@ public class SellerAPI {
 	}
 	
 	@GetMapping(value="allSellers")
-	public ResponseEntity<List<Seller>> getAllSellers() throws Exception{
-		ResponseEntity <List<Seller>> responseEntity = null;
+	public ResponseEntity<List<String>> getAllSellers() throws Exception{
+		ResponseEntity <List<String>> responseEntity = null;
 		try {
-			List<Seller> sellerList = sellerService.getAllSellers();
+			List<String> sellerList = sellerService.getAllSellers();
 			responseEntity = new ResponseEntity(sellerList, HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		return responseEntity;
+	}
+	
+	@PostMapping(value="updateSeller")
+	public ResponseEntity<String> updateSeller(@RequestBody Seller seller){
+		ResponseEntity<String> responseEntity = null;
+		String msg = null;
+		try {
+			sellerService.updateSeller(seller);
+			msg="SUCCESS";
+			responseEntity = new ResponseEntity<String>(msg,HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return responseEntity;
+	}
+	
+	
+	@PostMapping(value="updatePassword")
+	public ResponseEntity<String> updatePassword(@RequestBody Seller seller){
+		String msg = null;
+		ResponseEntity<String> responseEntity = null;
+		try {
+			msg = sellerService.updatePassword(seller);
+			responseEntity = new ResponseEntity<String>(msg, HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return responseEntity;
+	}
+	
+	@GetMapping(value="sellerDetails")
+	public ResponseEntity<Seller> getSellerDetails(@RequestBody Seller seller){
+		ResponseEntity<Seller> responseEntity = null;
+		try {
+			Seller sellerInfo = sellerService.getSellerDetails(seller);
+			responseEntity = new ResponseEntity<Seller>(sellerInfo, HttpStatus.OK);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return responseEntity;
+	}
+	
+	@GetMapping(value="sellerLogin")
+	public ResponseEntity<Boolean> authenticateLogin(@RequestBody Seller seller){
+		Boolean b = false;
+		ResponseEntity<Boolean> responseEntity = null;
+		try {
+			b = sellerService.authenticateLogin(seller);
+			responseEntity = new ResponseEntity<Boolean>(b, HttpStatus.OK);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return responseEntity;
+	}
+	
+	@GetMapping(value="deals")
+	public ResponseEntity<List> getSellerDeals(@RequestBody Seller seller){
+		ResponseEntity responseEntity = null;
 		return responseEntity;
 	}
 }

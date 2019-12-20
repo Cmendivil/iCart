@@ -37,10 +37,10 @@ public class SellerDAO implements SellerDAOInterface{
 	}
 
 	@Override
-	public List<Seller> getAllSellers() throws Exception {
+	public List<String> getAllSellers() throws Exception {
 		
 		List<SellerEntity> sellerEntityList;
-		List<Seller> sellersList = new ArrayList<Seller>();
+		List<String> sellersList = new ArrayList<String>();
 		
 		Query query = entityManager.createQuery("select s from SellerEntity s");
 		
@@ -49,14 +49,50 @@ public class SellerDAO implements SellerDAOInterface{
 		sellerEntityList.forEach(sellerEntity -> {
 			Seller seller = new Seller();
 			seller.setEmail_id(sellerEntity.getEmail_id());
-			seller.setName(sellerEntity.getName());
-			seller.setPassword(sellerEntity.getPassword());
-			seller.setPhone(sellerEntity.getPhone());
-			seller.setAddress(sellerEntity.getAddress());
-			sellersList.add(seller);
+			sellersList.add(seller.getEmail_id());
 		});
 	
 		return sellersList;
+	}
+
+	@Override
+	public void updateSeller(Seller seller) throws Exception {
+			SellerEntity sellerEntity = entityManager.find(SellerEntity.class, seller.getEmail_id());
+			sellerEntity.setAddress(seller.getAddress());
+			sellerEntity.setEmail_id(seller.getEmail_id());
+			sellerEntity.setName(seller.getName());
+			sellerEntity.setPhone(seller.getPhone());
+	}
+
+	@Override
+	public String updatePassword(Seller seller) throws Exception {
+		SellerEntity sellerEntity = entityManager.find(SellerEntity.class, seller.getEmail_id());
+		sellerEntity.setPassword(seller.getPassword());
+		return "SUCCESSFULLY CHANGED PASSWORD";
+	}
+
+	@Override
+	public Seller getSellerDetails(Seller seller) throws Exception {
+		SellerEntity sellerEntity = entityManager.find(SellerEntity.class, seller.getEmail_id());
+		Seller sellerInfo = new Seller();
+		sellerInfo.setEmail_id(sellerEntity.getEmail_id());
+		sellerInfo.setAddress(sellerEntity.getAddress());
+		sellerInfo.setName(sellerEntity.getName());
+		sellerInfo.setPassword(sellerEntity.getPassword());
+		sellerInfo.setPhone(sellerEntity.getPhone());
+		return sellerInfo;
+	}
+
+	@Override
+	public Boolean authenticateLogin(Seller seller) throws Exception {
+		SellerEntity sellerEntity = entityManager.find(SellerEntity.class, seller.getEmail_id());
+		if(sellerEntity == null) {
+			return false;
+		}
+		if(sellerEntity.getPassword().equals(seller.getPassword())) {
+			return true;
+		}
+		return false;
 	}
 
 }
