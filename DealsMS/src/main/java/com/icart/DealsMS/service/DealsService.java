@@ -23,8 +23,13 @@ public class DealsService implements DealsServiceInterface {
 	}
 
 	@Override
-	public List<Deals> getAllDeals(String emailId) throws Exception {
-		return dealsDAO.getAllDeals(emailId);
+	public List<Deals> getMyDeals(String emailId) throws Exception {
+		return dealsDAO.getMyDeals(emailId);
+	}
+
+	@Override
+	public void removeDeal(Integer dealId) throws Exception {
+		dealsDAO.removeDeal(dealId);	
 	}
 
 }

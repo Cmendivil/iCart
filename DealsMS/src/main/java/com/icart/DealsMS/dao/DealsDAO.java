@@ -22,7 +22,7 @@ public class DealsDAO implements DealsDAOInterface {
 	public int addNewDeal(Deals deal) throws Exception {
 		DealsEntity dealEntity = new DealsEntity();
 		
-		dealEntity.setDealId(deal.getDealId());
+		//dealEntity.setDealId(deal.getDealId());
 		dealEntity.setProductId(deal.getProductId());
 		dealEntity.setDealDiscount(deal.getDealDiscount());
 		dealEntity.setSellerEmailId(deal.getSellerEmailId());
@@ -33,12 +33,12 @@ public class DealsDAO implements DealsDAOInterface {
 	}
 
 	@Override
-	public List<Deals> getAllDeals(String emailId) throws Exception {
-		DealsEntity dealsEntity = entityManager.find(DealsEntity.class, emailId);
+	public List<Deals> getMyDeals(String emailId) throws Exception {
+		//DealsEntity dealsEntity = entityManager.find(DealsEntity.class, emailId);
 		
 		List<Deals> dealsList = new ArrayList<Deals>();
-		Query query = entityManager.createQuery("select d from DealsEntity d where EMAIL_ID="+emailId);
-		
+		Query query = entityManager.createQuery("select d from DealsEntity d where SELLER_EMAIL_ID= :emailId");
+		query.setParameter("emailId", emailId);
 		List<DealsEntity> dealsEntityList = query.getResultList();
 		
 		dealsEntityList.forEach(deal ->{
@@ -49,7 +49,15 @@ public class DealsDAO implements DealsDAOInterface {
 			dealBean.setDealDiscount(deal.getDealDiscount());
 			dealsList.add(dealBean);
 			});
+
 		return dealsList;
+	}
+
+	@Override
+	public void removeDeal(Integer dealId) throws Exception {
+		DealsEntity dealsEntity = entityManager.find(DealsEntity.class, dealId);
+		entityManager.remove(dealsEntity);
+		
 	}
 
 }

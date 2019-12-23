@@ -7,5 +7,6 @@ import com.icart.DealsMS.bean.Deals;
 public interface DealsServiceInterface {
 
 	public int addNewDeal(Deals deal) throws Exception;
-	public List<Deals> getAllDeals(String emailId) throws Exception;
+	public List<Deals> getMyDeals(String emailId) throws Exception;
+	public void removeDeal(Integer dealId) throws Exception;
 }

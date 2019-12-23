@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +27,7 @@ public class DealsAPI {
 	DealsService dealsService;
 	
 	@PostMapping(value="NewDeal")
-	public ResponseEntity<Integer> addNewDeal(@RequestBody Deals deal){
+	public ResponseEntity<Integer> addNewDeal(@RequestBody Deals deal) throws Exception{
 		ResponseEntity<Integer> responseEntity = null;
 		Integer id = 0;
 		try {
@@ -37,11 +39,11 @@ public class DealsAPI {
 		return responseEntity;
 	}
 	
-	@GetMapping(value="Deals")
-	public ResponseEntity<List<Deals>> getAllDeals(@RequestParam("emailId") String emailId){
+	@GetMapping(value="deals/{emailId}")
+	public ResponseEntity<List<Deals>> getMyDeals(@PathVariable("emailId") String emailId) throws Exception{
 		ResponseEntity<List<Deals>> responseEntity = null;
 		try {
-			List<Deals> deals = dealsService.getAllDeals(emailId);
+			List<Deals> deals = dealsService.getMyDeals(emailId);
 			responseEntity = new ResponseEntity<List<Deals>>(deals, HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -49,7 +51,10 @@ public class DealsAPI {
 		return responseEntity;
 	}
 	
-//	@GetMapping(value="RemoveDeal")
+	@DeleteMapping(value="RemoveDeal/{dealId}")
+	public void removeDeal(@PathVariable("dealId") Integer dealId) throws Exception {
+		dealsService.removeDeal(dealId);
+	}
 	
 	
 }
