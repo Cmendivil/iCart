@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.icart.SellerMS.bean.Deals;
 import com.icart.SellerMS.bean.Seller;
 import com.icart.SellerMS.service.SellerService;
 
@@ -114,8 +116,12 @@ public class SellerAPI {
 	}
 	
 	@GetMapping(value="deals")
-	public ResponseEntity<List> getSellerDeals(@RequestBody Seller seller){
-		ResponseEntity responseEntity = null;
-		return responseEntity;
+	public Deals[] getSellerDeals(@RequestBody Seller seller){
+		ResponseEntity<Deals []> responseEntity = new RestTemplate().getForEntity("http://localhost:8081/DealsAPI/deals/"+seller.getEmail_id(), Deals[].class);
+		Deals[] deals = responseEntity.getBody(); 
+		System.out.println(deals);
+		return deals;
 	}
+	
+	
 }

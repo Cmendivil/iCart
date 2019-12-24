@@ -1,6 +1,6 @@
 package com.icart.SellerMS.bean;
 
-
+import java.util.List;
 
 public class Seller {
 	
@@ -10,8 +10,15 @@ public class Seller {
 	private String phone;
 	private String address;
 	private String email_id;
+	private List<Deals> deals;
 	
 	
+	public List<Deals> getDeals() {
+		return deals;
+	}
+	public void setDeals(List<Deals> deals) {
+		this.deals = deals;
+	}
 	public String getEmail_id() {
 		return email_id;
 	}
