@@ -1,9 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SellerComponent } from './seller/seller.component';
+import { HttpClientModule } from '@angular/common/http';
+import { SellerService } from './seller/seller.service';
 
 @NgModule({
   declarations: [
@@ -12,9 +14,12 @@ import { SellerComponent } from './seller/seller.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ReactiveFormsModule,
+    FormsModule, 
+    HttpClientModule
   ],
-  providers: [],
+  providers: [SellerService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
