@@ -69,6 +69,10 @@ export class SellerComponent implements OnInit {
    
   }
 
+  getSellerDeals(){
+    
+  }
+
 
 
   constructor(private sellerService:SellerService, private activatedRoute:ActivatedRoute, private formBuilder:FormBuilder) { }

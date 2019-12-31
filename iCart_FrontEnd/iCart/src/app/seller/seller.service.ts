@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Seller } from './Seller'
 import { Observable } from 'rxjs';
+import { Deal } from './Deal';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,5 +18,9 @@ registerSeller(data:any):Observable<any>{
   getSellerDetails(data):Observable<Seller>{
     console.log("Data: " + data);
     return this.http.get<Seller>("http://localhost:8080/sellerDetails/"+data);
+  }
+
+  getSellerDeals():Observable<Deal[]>{
+    return this.http.get<Deal[]>("http://localhost:8080/deals")
   }
 }
