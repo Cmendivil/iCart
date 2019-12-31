@@ -14,11 +14,13 @@ export class SellerComponent implements OnInit {
 
   seller:Seller;
   sellerForm:FormGroup;
-  sellerId:String;
   successMessage:String;
   errorMessage:String;
   registerNewSeller:Boolean = false;
   showDetailsFlag:Boolean = false;
+  idToFind:string;
+  validSellerDetails:Boolean = false;
+
   newSellerFlag(){
     if(this.registerNewSeller == false){
       this.registerNewSeller = true;
@@ -49,11 +51,22 @@ export class SellerComponent implements OnInit {
 
   }
 
+  flag(){
+    this.validSellerDetails = true
+  }
 
-  getSellerDetails(){
-    this.activatedRoute.paramMap.subscribe(
-      params => this.sellerId = params.get('emailId')
-    )
+  sellerId:String = "";
+  S:Seller
+  getSellerDetails(emailId){
+    this.flag()
+    this.sellerId = emailId
+   this.activatedRoute.paramMap.subscribe(
+     params => this.sellerId = params.get('emailId')
+   );
+   this.sellerService.getSellerDetails(emailId).subscribe(
+     x => {this.S = x; console.log(this.S)}
+   )
+   
   }
 
 
@@ -67,6 +80,7 @@ export class SellerComponent implements OnInit {
       address:['', Validators.required],
       email_id:['', Validators.required]
     })
+
   }
 
 }

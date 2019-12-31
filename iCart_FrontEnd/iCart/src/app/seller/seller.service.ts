@@ -14,7 +14,8 @@ registerSeller(data:any):Observable<any>{
   return <Observable<any>> this.http.post("http://localhost:8080/registerSeller", data);
 }
 
-  getSellerDetails(seller:Seller):Observable<Seller>{
-    return this.http.get<Seller>("http://localhost:8080/sellerDetails");
+  getSellerDetails(data):Observable<Seller>{
+    console.log("Data: " + data);
+    return this.http.get<Seller>("http://localhost:8080/sellerDetails/"+data);
   }
 }

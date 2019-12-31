@@ -1,8 +1,22 @@
 <button (click)="newSellerFlag()">Register as Seller</button>
 <button (click)="showDetails()">Get Seller Details</button>
+
 <div *ngIf="showDetailsFlag">
-    <h1>DETAILS WILL SHOW HERE</h1>
+    
+        <div>
+            <label>Email: </label>
+            <input type="text" name="sellerId" [(ngModel)]="sellerId">
+        </div>
+        <button (click)="getSellerDetails(sellerId)" class="btn btn-primary">Find</button>
 </div>
+
+<div *ngIf="validSellerDetails">
+    <br>{{S.email_id}}
+    <br>{{S.phone}}
+    <br>{{S.name}}
+    <br>{{S.address}}
+</div>
+
 <div *ngIf="registerNewSeller">
     <div class="container">
         <form [formGroup]="sellerForm" (ngSubmit)="registerSeller()">
