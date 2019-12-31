@@ -39,6 +39,7 @@ public class SellerAPI {
 	public ResponseEntity<String> registerSeller(@RequestBody Seller seller) throws Exception{
 		ResponseEntity<String> responseEntity = null;
 		try {
+			LOGGER.info("USER TRYING TO REGISTER AS A SELLER WITH EMAIL ID " + seller.getEmail_id());
 			String emailId = sellerService.registerSeller(seller);
 			responseEntity = new ResponseEntity<String>(emailId, HttpStatus.OK);
 		}catch(Exception e) {
