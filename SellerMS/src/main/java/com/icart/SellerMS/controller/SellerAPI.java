@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.icart.SellerMS.bean.Deals;
 import com.icart.SellerMS.bean.Seller;
@@ -37,42 +38,46 @@ public class SellerAPI {
 	
 	@PostMapping(value="registerSeller")
 	public ResponseEntity<String> registerSeller(@RequestBody Seller seller) throws Exception{
-		ResponseEntity<String> responseEntity = null;
 		try {
-			LOGGER.info("USER TRYING TO REGISTER AS A SELLER WITH EMAIL ID " + seller.getEmail_id());
+			LOGGER.info("USER IS ATTEMPTING TO REGISTER AS A SELLER WITH EMAIL ID: " + seller.getEmail_id());
 			String emailId = sellerService.registerSeller(seller);
-			responseEntity = new ResponseEntity<String>(emailId, HttpStatus.OK);
+			//emailId = env.getProperty("SellerAPI.SUCCESSFULLY_REGISTERED") + emailId;
+			LOGGER.info(env.getProperty("SellerAPI.SUCCESSFULLY_REGISTERED", "SUCCESSFULLY REGISTERED SELLER: " + emailId));
+			return new ResponseEntity<String>(emailId, HttpStatus.OK);
 		}catch(Exception e) {
-			e.printStackTrace();
+			if(e.getMessage().contains("Validator")) {
+				throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, env.getProperty(e.getMessage()));
+			}
+			throw new ResponseStatusException(HttpStatus.CONFLICT, env.getProperty(e.getMessage()));
 		}
-		
-		return responseEntity;
 	}
 	
 	@GetMapping(value="allSellers")
 	public ResponseEntity<List<String>> getAllSellers() throws Exception{
-		ResponseEntity <List<String>> responseEntity = null;
+		
 		try {
+			LOGGER.info("ATTEMPTING TO RETRIEVE ALL SELLERS ... ");
 			List<String> sellerList = sellerService.getAllSellers();
-			responseEntity = new ResponseEntity(sellerList, HttpStatus.OK);
+			LOGGER.info(env.getProperty("SellerAPI.LIST_OF_SELLERS"),"LIST HAS BEEN RETRIEVED ... ");
+			return new ResponseEntity<List<String>>(sellerList, HttpStatus.OK);
 		}catch(Exception e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, env.getProperty("SellerAPI.NO_SELLERS_FOUND"));
 		}
-		return responseEntity;
+		
 	}
 	
 	@PostMapping(value="updateSeller")
-	public ResponseEntity<String> updateSeller(@RequestBody Seller seller){
-		ResponseEntity<String> responseEntity = null;
-		String msg = null;
+	public void updateSeller(@RequestBody Seller seller){
 		try {
+			LOGGER.info("USER ATTEMPTING TO UPDATE ACCOUNT ... ");
 			sellerService.updateSeller(seller);
-			msg="SUCCESS";
-			responseEntity = new ResponseEntity<String>(msg,HttpStatus.OK);
+			LOGGER.info(env.getProperty("SellerAPI.SUCCESSFULLY_UPDATED_SELLER"), "ACCOUNT SUCCESSFULLY UPDATED ... ");
 		}catch(Exception e) {
 			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, env.getProperty("SellerAPI.UPDATE_FAIL"));
 		}
-		return responseEntity;
+		
 	}
 	
 	
