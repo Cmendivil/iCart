@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.icart.SellerMS.Validator.Validator;
 import com.icart.SellerMS.bean.Seller;
 import com.icart.SellerMS.dao.SellerDAO;
 
@@ -17,7 +18,11 @@ public class SellerService implements SellerServiceInterface {
 	
 	
 	@Override
-	public String registerSeller(Seller seller) {
+	public String registerSeller(Seller seller) throws Exception {
+		Boolean b = Validator.validateName(seller.getName());
+		if(b == false) {
+			throw new Exception("SellerService.INVALID_NAME");
+		}
 		return sellerDAO.registerSeller(seller);
 	}
 
